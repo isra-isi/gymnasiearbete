@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="cyberrage-gymnasiumarbete"> 
+    <title>Cyberrage</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="logg.js"></script>
+    <script>nollstallLogg(); startaLogg();</script> <!-- håller koll på användarbeteende, startar tid -->
+</head>
+<body class="login">
+    <header>
+        <div class="kort">
+         <h1>Skapa konto</h1>
+         <p class="undertext">Steg 1 av 6 – Registrera dig</p>
+
+    <div class="steg-cirklar">
+        <div class="steg aktiv">1</div>
+        <div class="steg">2</div>
+        <div class="steg">3</div>
+        <div class="steg">4</div>
+        <div class="steg">5</div>
+        <div class="steg">6</div>
+    </div>
+
+    <form id="registration-form">
+        <div class="form-grid">
+            <div>
+                <label for="username">Namn</label>
+                <input type="text" id="username" name="username">
+            </div>
+            <div>
+                <label for="email">E-post</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div>
+                <label for="tel">Tel</label>
+                <input type="tel" id="tel" name="tel">
+            </div>
+            <div>
+                <label for="password">Lösenord</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+        </div>
+
+        <div style="margin-top: 22px;">
+            <label>Födelsedag</label>
+            <div class="födelsedag">
+                <select id="dag" aria-label="Dag"></select>
+                <select id="manad" aria-label="Månad"></select>
+                <select id="ar" aria-label="År"></select>
+            </div>
+        </div>
+
+        <div class="knappar">
+            <button type="submit" class="btn btn-primär">Nästa</button>
+            <button type="button" class="btn btn-sekundär" id="avbryt">Avbryt</button>
+        </div>
+    </form>
+
+     <div>
+     <p class="byt-sida">Har du redan ett konto? <a href="login.html">Logga in</a></p>
+     <p id="meddelande"></p>
+     </div>
+    </header>
+    <script>
+      // Dag och månad
+      const dagSel = document.getElementById("dag");
+     for (let i = 1; i <= 31; i++) dagSel.append(new Option(i, i));
+
+      const manader = ["Januari","Februari","Mars","April","Maj","Juni","Juli","Augusti","September","Oktober","November","December"];
+      const manadSel = document.getElementById("manad");
+      manader.forEach((m, i) => manadSel.append(new Option(m, i + 1)));
+
+     // År
+      const arSel = document.getElementById("ar");
+      arSel.append(new Option("Välj år", ""));
+     for (let y = 4000; y >= 1; y--) arSel.append(new Option("f.Kr. " + y, -y));
+     for (let y = 1; y <= 2026; y++) arSel.append(new Option(y, y));
+
+     document.getElementById("avbryt").onclick = () => {
+      window.location.href = "index.html";
+     };
+    </script>
+     
+    <script type="module"> // firbase kod!!!//
+      import { auth } from "./firebase.js";
+      import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+
+      document.getElementById("registration-form").addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const email = document.getElementById("email").value;
+          const password = document.getElementById("password").value;
+
+          try {
+              await createUserWithEmailAndPassword(auth, email, password);
+             window.location.href = "human.html";
+            } catch (fel) {
+            let msg = "Något gick fel. Försök igen.";
+            if (fel.code === "auth/email-already-in-use") msg = "E-postadressen används redan.";
+            if (fel.code === "auth/invalid-email") msg = "Ogiltig e-postadress.";
+            if (fel.code === "auth/weak-password") msg = "Lösenordet måste vara minst 6 tecken.";
+            document.getElementById("meddelande").textContent = msg;
+
+    }
+  });
+</script>
+   
+</body>
+</html>

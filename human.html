@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="cyberrage-gymnasiumarbete">
+    <title>Cyberrage</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="logg.js"></script> <!-- håller koll på användarbeteende,håller tid igång -->
+</head>
+<body>
+    <header>
+        <h1>Hoppas ayse fixar yey</h1>
+        <a href="ansokan.html">vidare</a>
+    </header>
+    <script type="module">
+  import { auth } from "./firebase.js";
+  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      window.location.href = "login.html";
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="sv">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="cyberrage-gymnasiumarbete">
+    <title>Cyberrage</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="logg.js"></script> <!-- håller koll på användarbeteende -->
+</head>
+<body class="rate">
+    <div class="betyg-kort">
+    <div id="betyg-del">
+    <h2>Rate us</h2>
+    <p id="betyg-text">Dra i reglaget</p> 
+
+    <div class="smileys" id="smileys">
+        <span data-grans="0">😐</span>
+        <span data-grans="3">😄</span>
+        <span data-grans="6">😞</span>
+        <span data-grans="10">😟</span>
+    </div>
+
+    <input type="range" id="betyg-range" min="0" max="10" step="1" value="3">
+    <div class="skala"><span>0</span><span>3</span><span>6</span><span>10</span></div>
+    
+    <button class="btn btn-primär" id="skicka">Submit</button>
+    </div>
+    
+    <div id="resultat" style="display:none;">
+        <div class="resultat-text">
+        <p class="liten-etikett">DITT RESULTAT</p> <!-- här visas resultatet, vilken personlighet-->
+        <h2>Du är personlighets typen:</h2>
+        <p id="typ-namn">typen</p>
+        </p><p id="typ-text"></p>
+        
+        </div>
+
+        <div class="resultat-kort" id="resultat-detaljer">
+            <p>Tid det tog: <span id="res-tid"></span></p>
+            <p>Felklick: <span id="res-felklick"></span></p>
+            <p>Popups stängda: <span id="res-stangda"></span></p>
+            <p>Popups klickade: <span id="res-klickade"></span></p>
+            <p>Betyg du gav oss: <span id="res-betyg"></span></p>
+        </div>
+        <p class="resultat-tack">Tack för att du medverkat och bidragit med data till cybersäkerhet</p>
+    </div>
+    </div>
+  <script type="module">
+    import { auth, db } from "./firebase.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+    import { doc, setDoc } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+    onAuthStateChanged(auth, (user) => {
+        if (!user) window.location.href = "login.html";
+    });
+
+    // Reglage + smileys
+    const range = document.getElementById("betyg-range");
+    const text = document.getElementById("betyg-text");
+    const smileys = [...document.querySelectorAll("#smileys span")];
+
+    function uppdatera() {
+        const v = Number(range.value);
+        let närmast = smileys[0];
+        smileys.forEach(s => {
+            if (Math.abs(Number(s.dataset.grans) - v) <= Math.abs(Number(närmast.dataset.grans) - v))
+                närmast = s;
+        });
+        smileys.forEach(s => s.classList.toggle("aktiv", s === närmast));
+        text.textContent = "Du gav oss " + v + " av 10";
+    }
+    range.addEventListener("input", uppdatera);
+    uppdatera();
+
+    // Skicka in betyg
+    let skickat = false;
+    let sparatBetyg = null;
+
+document.getElementById("skicka").addEventListener("click", () => {
+    const knapp = document.getElementById("skicka");
+
+    // Första klicket: lås reglaget och byt knapp till resultat
+    if (!skickat) {
+        range.disabled = true;
+        sparatBetyg = Number(range.value);
+        knapp.textContent = "Resultat";
+        skickat = true;
+        return;
+    }
+    //andra klicket: stoppa klockan,spara och visa betyg
+    loggaSlut();
+        const l = hamtaLogg() || {tidMs: 0, felklick: 0, popupsStangda: 0, popupsKlickade: 0};
+        const typNyckel= valjTyp(l);
+        const typ=PERSONLIGHETER[typNyckel];
+
+        const klick = Number(localStorage.getItem("falleklick")) || 0;
+        const user = auth.currentUser;
+        if (user && db) {
+            setDoc(doc(db, "resultat", user.uid), {
+                betyg: sparatBetyg,
+                falleKlick: klick,
+                beteende: l,
+                personlighet: typNyckel,
+                tidstampel: new Date().toISOString()
+            }).catch((e) => console.log("Kunde inte spara till Firestore:", e));
+        } else {
+            localStorage.setItem("betyg", sparatBetyg);
+        }
+    
+
+    // Andra klicket: byt ut allt mot resultatet och tacket
+    
+
+    document.getElementById("typ-namn").textContent = typ.namn;
+    document.getElementById("typ-text").textContent = typ.text;
+    document.getElementById("res-tid").textContent = formatTid(l.tidMs);
+    document.getElementById("res-felklick").textContent = l.felklick;
+    document.getElementById("res-stangda").textContent = l.popupsStangda;
+    document.getElementById("res-klickade").textContent = l.popupsKlickade;
+    document.getElementById("res-betyg").textContent = sparatBetyg
+    document.getElementById("betyg-del").style.display = "none";
+    document.getElementById("resultat").style.display = "block";
+});
+   </script>
+</body>
+</html>

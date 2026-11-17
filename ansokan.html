@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="sv">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="cyberrage-gymnasiumarbete">
+<title>Cyberrage</title>
+<link rel="stylesheet" href="styles.css">
+<script src="logg.js"></script> <!-- håller tiden igång -->
+
+<body class="ansokan"> 
+  <!--UPPE:rubrik till vänster, sidraknare+cirklar till höger-->
+  <header class="topp">
+    <h1 class="sidtitel">HITTA DIN PERSONLIGHET</h1>
+    <div class="topp-hoger">
+      <span class="sidrakning">SIDA 4 AV 6</span>
+      <div class="steg-cirklar" id="steg"></div>
+      </div>
+  </header>
+<!---MITTEN-->
+  <div class="layout">
+  <div class="sidtexter">
+       <p id="sidnr">SIDA = 04</p>
+      <p id="själv">OM DIG<br>SJÄLV</p> 
+      <p id="vänlig"> Vi vill i denna delen att du är ärlig med <br>allt du svarar på</p>
+  </div>
+   <div class="quiz">
+    
+    <div class="raknare" id="raknare"></div>
+    <div id="innehall"></div>
+  </div>
+  </div>
+  <!---UNDER nere-->
+  <footer class="botten">
+    <div class="knappar">
+      <button id="tillbaka">Föregående</button>
+      <button id="nasta">Nästa</button>
+    </div>
+  </footer>
+
+  <script>
+   const fragor = [
+  { fraga: "Fråga 1",
+    alternativ: ["Alternativ 1", "Alternativ 2", "Alternativ 3"],
+    ratt: 0 },
+  { fraga: "Fråga 2",
+    alternativ: ["Alternativ 1", "Alternativ 2", "Alternativ 3"],
+    ratt: 0 },
+  { fraga: "Fråga 3",
+    alternativ: ["Alternativ 1", "Alternativ 2", "Alternativ 3"],
+    ratt: 0 },
+  { fraga : "Fråga 4",
+    alternativ: ["Alternativ 1", "Alternativ 2", "Alternativ 3"],
+    ratt: 0 },
+  { fraga: "Fråga 5",
+    alternativ: ["Alternativ 1", "Alternativ 2", "Alternativ 3"],
+    ratt: 0 },
+  { fraga: "Fråga 6",
+    alternativ: ["Alternativ 1", "Alternativ 2", "Alternativ 3"],
+    ratt: 0 }
+];
+
+    let nu = 0;
+    const svar = new Array(fragor.length).fill(null);
+
+    const innehall = document.getElementById("innehall");
+    const steg = document.getElementById("steg");
+    const raknare = document.getElementById("raknare");
+    const tillbaka = document.getElementById("tillbaka");
+    const nasta = document.getElementById("nasta");
+    // Bygg en cirkel per fråga
+    fragor.forEach((_, i) => {
+      const c = document.createElement("div");
+      c.className = "steg";
+      c.textContent = i + 1;
+      c.onclick = () => {         //så att de går att klicka på cirklarna
+        if (i < nu) { nu = i; visa(); }
+        else loggaFelklick(); //loggar felklick
+      };
+      steg.appendChild(c);
+       });
+
+     function uppdateraSteg() {
+        [...steg.children].forEach((c, i) => {
+        c.classList.toggle("aktiv", i === nu);
+        c.classList.toggle("klar", i < nu);
+      });
+}
+
+    function visa() {
+      const f = fragor[nu];
+      raknare.textContent = "Fråga " + (nu + 1) + " av " + fragor.length;
+      uppdateraSteg();
+
+      innehall.innerHTML = "<h2>" + f.fraga + "</h2>";
+      if (nu===fragor.length -1){
+        const klar=document.createElement("button");
+        klar.className = "Klar-text";
+        klar.textContent = "Klar";
+        klar.onclick = skickaIn;
+        innehall.querySelector("h2").append(" ", klar);
+      }
+      f.alternativ.forEach((text, i) => {
+        const knapp = document.createElement("button");
+        knapp.className = "alternativ" + (svar[nu] === i ? " vald" : "");
+        knapp.textContent = text;
+        knapp.onclick = () => { svar[nu] = i; visa(); };
+        innehall.appendChild(knapp);
+      });
+
+      tillbaka.disabled = nu === fragor.length - 1; //knapp funkar från första frågan inte sista
+      nasta.textContent = "nästa";
+    }
+
+      tillbaka.onclick = () => { if (nu <fragor.length - 1) {nu++; visa(); }}; //föregånde funkar som nästa
+      nasta.onclick = () => {
+      if (nu === fragor.length - 1)  { nu = 0; visa(); }
+      else loggaFelklick(); // loggar felklick
+    }
+
+    function skickaIn() { //funktion så att man kan skicka in svaren genom klar
+      const saknas = [];
+      svar.forEach((s, i) => { if (s === null) saknas.push(i + 1); }); // hur många man inte svarat
+
+      if (saknas.length > 0) { //kan inte gå förbi sista eller lämn in utan besvara
+        alert("Fråga " + saknas.join(", ") + " är inte besvarade");
+        return;
+      }
+      localStorage.setItem("quizSvar", JSON.stringify(svar));
+      window.location.href = "rate.html";
+    }
+
+    visa();
+    </script>
+ <script type="module">
+  import { auth } from "./firebase.js";
+  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      window.location.href = "login.html";
+    }
+  });
+</script>
+</body>
+</html>

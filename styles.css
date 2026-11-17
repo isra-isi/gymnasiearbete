@@ -1,0 +1,678 @@
+
+  :root {
+    --blå: #2563eb;
+    --blå-mörk: #1d4ed8;
+    --blå-ljus: #eff6ff;
+    --blå-kant: #bfdbfe;
+    --text: #1e293b;
+    --text-ljus: #64748b;
+    --fält: #f1f5f9;
+    --fält-kant: #e2e8f0;
+    --vit: #ffffff;
+  }
+  :root {
+    --color-background:#C6B39A;
+    --color-bakblå:#4F2D43;
+    --color-inretext: #4F5F4C;
+    --color-bakmörk:  #0C4553;
+    --color-ljusblå: #3E8A99;
+    --color-oaktivtext: #bac1c5;
+    --color-knappbakgrund: #48293D;
+    --color-shadow: #638872;
+  }
+  :root {
+  /* ===== SIDANS GRUNDFÄRGER ===== */
+  --sida-bakgrund:   #3B2133;   /* burgundy, bakom allt */
+  --text-ljus:       #F5F0DC;   /* ljus text på mörka ytor (rubriker, frågor) */
+  --text-mork:       #2A1A20;   /* mörk text på ljusa ytor (guldknappar, sand-kortet) */
+
+  /* ===== GULD ===== */
+  --guld:            #D4B06A;                    /* knappar, cirklar, etiketter */
+  --guld-svag:       rgba(212, 176, 106, 0.45);  /* tunna linjer och kantlinjer */
+
+  /* ===== KORTFÄRGER (en per sida) ===== */
+  --kort-plommon:    #4F2D43;   /* sida 1 och 6 */
+  --kort-sand:       #C6B39A;   /* sida 2, logga in */
+  --kort-moss:       #4F5F4C;   /* sida 3, verifiering */
+  --kort-tegel:      #8D3A3C;   /* sida 4, om dig själv */
+  --kort-damm:       #3E5265;   /* sida 5, sammanfattning */
+
+  /* ===== ÖVRIGT ===== */
+  --skugga:          rgba(0, 0, 0, 0.35);
+}
+
+
+  * { box-sizing: border-box; }
+  body.startsida {
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    padding-top: 60px;
+    display: flex;
+  }
+  .startsida .button button {
+    color: var(--vit);
+    padding: 8px 20px;
+    font-size: 15px;
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    background-color: var(--blå-mörk);
+    font-weight: 600;
+    
+
+
+  }
+
+  /* logg in? */
+
+  body.login {
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--color-inretext);
+    color: var(--text);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+  }
+
+  /* Kortet som håller allt */
+  .login .kort {
+    background: var(--color-inretext);
+    width: 92%;
+    max-width: 760px;
+    padding: 48px 40px;
+    border: 1px solid var(--color-background);
+    box-shadow: 0 6px 45px var(--color-bakmörk);
+    border-radius: 35px;
+  }
+
+  .login .kort h1 {
+    color: var(--color-bakblå);
+    text-align: center;
+    font-size: 28px;
+    font-weight: 700;
+    font-style: oblique;
+    margin: 0 0 8px;
+  }
+
+  .login .undertext {
+    text-align: center;
+    color: var(--color-background);
+    font-size: 15px;
+    margin: 0 0 36px;
+  }
+
+  /* Steg-cirklar */
+  .login .steg-cirklar {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    margin-bottom: 36px;
+  }
+
+  .login .steg {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--color-bakblå);
+    border: 1px solid var(--color-inretext);
+    color: var(--color-background);
+    font-weight: 600;
+    font-size: 15px;
+    font-style: italic;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+  }
+
+  .login .steg.aktiv {
+    background: var(--color-background);
+    border-color: var(--color-bakblå);
+    color: var(--color-bakblå);
+    transform: scale(1.08);
+  }
+
+  .login .steg.klar {
+    background: var(--color-bakblå);
+    border-color: var(--color-inretext);
+    color: var(--color-background);
+  }
+
+  /*logg in Formulär i två kolumner */
+  .login .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px 36px;
+  }
+
+  .login label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .login input[type="text"],
+  .login input[type="email"],
+  .login input[type="password"],
+  .login input[type="tel"],
+  .login select {
+    width: 100%;
+    padding: 13px 16px;
+    border: 1px solid var(--color-shadow);
+    border-radius: 10px;
+    background: var(--color-inretext);
+    font-size: 15px;
+    color: var(--color-bakmörk);
+    transition: 0.15s;
+  }
+
+  .login input:focus, .login select:focus {
+    outline: none;
+    border-color: var(--color-bakmörk);
+    background: var(--color-inretext);
+    box-shadow: 0 0 1px 2px var(--color-shadow);
+  }
+
+  /* Födelsedag – tre rull-listor */
+  .login .födelsedag {
+    display: flex;
+    gap: 12px;
+  }
+
+  .login .födelsedag select { flex: 1; }
+
+  /* Knappar */
+  .login .knappar {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 36px;
+  }
+
+  .login .btn {
+    padding: 12px 34px;
+    border: none;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.15s;
+  }
+
+  .login .btn-primär { 
+    background: var(--color-bakmörk); 
+    color: var(--color-inretext); 
+    box-shadow: 0 4px 24px var(--color-shadow); 
+    box-shadow: 0 4px 24px var(--color-shadow); 
+
+  }
+  .login .btn-primär:hover { 
+    background: var(--color-blå-mörk);
+    color: var(--color-bakblå);
+    text-decoration: underline;
+    
+  }
+
+  .login .btn-sekundär {
+    background: var(--color-inretext);
+    color: var(--color-bakmörk);
+    border: 1px solid var(--color-background);
+    box-shadow: 0 4px 24px var(--color-shadow);
+  }
+  .login .btn-sekundär:hover { 
+    background: var(--color-bakmörk); 
+    color: var(--color-inretext);
+    text-decoration-line: underline;
+    
+    border: #105666;
+  }
+
+  .login .byt-sida {
+    text-align: center;
+    margin-top: 24px;
+    color: var(--text-ljus);
+    font-size: 14px;
+  }
+
+  .login .byt-sida a { 
+    color: var(--color-ljusblå); 
+    text-decoration: none; 
+    font-weight: 600; 
+  }
+  .login .byt-sida a:hover { 
+    text-decoration: underline; }
+
+  #meddelande {
+    text-align: center;
+    color: #dc2626;
+    margin-top: 16px;
+    font-size: 14px;
+  }
+
+
+  /* Rate us */
+  .rate{
+    background: var(--sida-bakgrund);
+  }
+  .rate .betyg-kort { 
+    padding: 20px 24px;
+    text-align: center; }
+
+  .rate .smileys {
+    display: flex;
+    justify-content: space-between;
+    max-width: 620px;
+    margin: 44px auto 24px;
+    font-size: 62px;
+    user-select: none;
+  }
+
+  .rate .smileys span {
+    filter: grayscale(1);
+    opacity: 0.55;
+    transition: 0.2s;
+  }
+
+  .rate .smileys span.aktiv {
+    filter: none;
+    opacity: 1;
+    transform: scale(1.25);
+  }
+
+  .rate input[type="range"] {
+    width: 100%;
+    max-width: 620px;
+    margin: 8px auto 6px;
+    display: block;
+    accent-color: var(--guld);
+  }
+  .rate h2 {
+    color: var(--kort-sand);
+    text-shadow: 0 3px 20px var(--guld-svag);
+    font-size: 70px;
+    font-weight: 600;
+    margin: 0;
+    padding: 60px 20px 45px;
+    margin-top: 35;
+  }
+  #skicka {
+    background: var(--kort-tegel);
+    color: var(--kort-sand);
+    box-shadow: 0 3px 25px var(--guld-svag);
+    padding: 12px 34px;
+    border: none;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.15s;
+    margin-top: 50px;
+  }
+
+  .rate .skala {
+    display: flex;
+    justify-content: space-between;
+    max-width: 620px;
+    margin: 0 auto 36px;
+    color: var(--kort-sand);
+    font-size: 18px;
+  }
+
+  .rate #betyg-text {
+    color: var(--kort-tegel);
+    text-shadow: 0 3px 25px var(--guld-svag);
+    font-style: italic;
+    margin-top: 0px;
+    min-height: 22px;
+    font-size: 20px;
+    
+    
+  }
+
+  .rate #tack {
+    color: var(--blå);
+    font-weight: 600;
+    font-size: 20px;
+  }
+
+  /* ===== Resultat ===== */
+  .rate #resultat h2 {
+    font-size: 20px;
+    letter-spacing: 4px;
+    color: var(--text-ljus);
+    margin: 20px;
+    padding: 0;
+    font-weight: 400;
+  }
+
+ 
+  
+
+  /* Själva personlighetstypen – störst av allt */
+  .rate #typ-namn {
+    display: block;
+    font-size: clamp(44px, 6vw, 80px);
+    font-weight: 400;
+    line-height: 1.1;
+    text-transform: uppercase;
+    letter-spacing: 6px;
+    color: var(--text-ljus);
+    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+    margin: 25px 0 25px;
+    text-shadow: 0 3px 20px var(--guld-svag);
+  }
+
+  /* Förklaringen – näst störst */
+  .rate #typ-text {
+    font-size: 20px;
+    line-height: 1.5;
+    color: var(--text-ljus);
+    max-width: 420px;
+    margin: 0 auto;
+
+    padding-bottom: 20px;
+    text-align: center;
+    font-style: italic;
+    text-shadow: 0 3px 20px var(--guld-svag);
+  }
+  
+  /* Detaljerna – små och dämpade, i en egen ruta */
+  .rate #resultat-detaljer {
+    background: var(--kort-moss);
+    border: 0.5px solid var(--guld-svag);
+    box-shadow: 0 6px 40px var(--guld-svag);   
+    border-radius: 25px;
+    padding: 20px;
+    margin: 15px;
+    flex: 0 0 520px;
+    text-align: left;
+  }
+
+  .rate #resultat-detaljer p {
+    display: flex;
+    justify-content: space-between;
+    font-size: 20px;
+    color: var(--text-ljus);
+    margin: 14px 0;
+    text-decoration: dashed;
+  }
+
+  .rate #resultat-detaljer span {
+    color: var(--text-ljus);
+    font-weight: 600;
+  }
+
+  /* Tack-texten längst ner */
+  .rate .resultat-tack {
+    font-size: 14px;
+    color: var(--guld-svag);
+    margin-top: 50px;
+    text-align: center;
+  }
+  .rate .resultat-layout {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(40px, 6vw, 120px);
+    text-align: left;
+  }
+  .rate .resultat-text{
+    flex: 1 1 0;
+    min-width: 220px;
+    text-align: center;
+  }
+  .rate .liten-etikett {
+    margin: 0 0 15px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    color: var(--guld);
+  }
+  
+  
+
+  /* ANSÖKAN */
+  body.ansokan {
+    font-family: system-ui, sans-serif;
+    background: var(--sida-bakgrund);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+  }
+  /*texter+kort så att de är bredvid varandra*/
+  .ansokan .layout {
+    flex: 1; /* tar upp allt utrymme mellan header och footer */
+    display: flex; /* så att texter och kort ligger bredvid varandra */
+    align-items: center;
+    justify-content: center;
+    gap: clamp(40px, 6vw, 150px);            /*ändra avstånd som krymer med skärm */
+    max-width: none;    /*ändra maxbredd på hela layouten */
+    padding: 0 110px 0 85px;      /*ändra höger=luft mot kantenn vänster= luft för text*/
+  }
+  .ansokan .sidtexter {
+   flex: 1 1 0; /*tar plats kort inte behöver men krymper först*/
+   min-width: 200px;
+   text-align: left;
+   margin-bottom: 115px;
+   }
+  .ansokan #själv {
+    font-size: 80px;
+    margin: 0 0 35px; /*avstånd till text under*/
+    letter-spacing: 8px;
+    overflow-wrap: break-word;
+    white-space: normal;
+    color: var(--text-ljus);
+    
+
+  }
+  .ansokan #vänlig {
+    overflow-wrap: break-word;
+    white-space: normal;
+    font-size: 20px;
+    margin: 0;
+    color: var(--text-ljus);
+  }
+  .ansokan .quiz {
+    position: relative; /* för att kunna positionera CIRKLAR */
+    flex: 0 0 650px; /* fast bredd för quiz-kortet */
+    background: var(--kort-tegel); 
+    width: 650px;
+    padding: 35px;
+    border-radius: 25px;
+    border: 1px solid var(--guld-svag);
+    box-shadow: 0 6px 40px var(--skugga);
+  }
+/* ===== UPPE ===== */
+ .ansokan .topp {
+   display: flex;
+   justify-content: space-between;   /* rubrik vänster, cirklar höger */
+   align-items: center;
+   margin: 0 80px;                   /* ÄNDRA: luft mot sidorna */
+   padding: 30px 0 25px;
+   border-bottom: 1px solid var(--guld-svag);   /* linjen under raden */
+}
+ .ansokan .sidtitel {
+   margin: 0;
+   font-size: 24px;
+   font-weight: 400;
+   letter-spacing: 6px;              /* ÄNDRA: luft mellan bokstäverna */
+   color: var(--guld);
+}
+ .ansokan .topp-hoger {
+   display: flex;
+   align-items: center;
+   gap: 25px;                        /* avstånd mellan "SIDA 4 AV 6" och cirklarna */
+}
+ .ansokan .sidrakning {
+   font-size: 13px;
+   font-weight: 700;
+   letter-spacing: 3px;
+   color: var(--guld);
+}
+
+/* ===== LITEN TEXT OVANFÖR RUBRIKEN ===== */
+ .ansokan #sidnr {
+   margin: 0 0 15px;
+   font-size: 14px;
+   font-weight: 700;
+   letter-spacing: 4px;
+   color: var(--guld);
+}
+
+/* ===== NERE ===== */
+  .ansokan .botten {
+   margin: 0 80px;                   /* samma luft som toppen så linjerna matchar */
+   padding: 25px 0 30px;
+   border-top: 1px solid var(--guld-svag);      /* linjen ovanför knapparna */
+}
+  .ansokan .botten .knappar {
+   margin-top: 0;                    /* nollställer den gamla marginalen */
+  }
+
+
+  .ansokan .Klar-text {
+    text-decoration: underline;
+    padding: 0;
+    margin: 0;
+    background: none;
+    font:inherit;
+    color: inherit;
+    border: none;
+    cursor: text;
+  }
+  
+  .ansokan .raknare {
+    color: var(--guld);
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+  .ansokan h2 {
+    /*följer inte vanliga flödet*/
+    font-size: 42px;
+    color: var(--text-ljus);
+  }
+  .ansokan .alternativ {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid var(--guld-svag);
+    border-radius: 10px;
+    background: transparent;
+    color: var(--text-ljus);
+    font-size: 19px;
+    cursor: pointer;
+    transition: 0.15s;
+  }
+  .ansokan .alternativ:hover { 
+    border-color: var(--guld);
+    background-color: rgba(0, 0, 0, 0.15);
+  }
+  .ansokan .alternativ.vald { 
+    border-color: var(--guld); 
+    background: var(--guld); 
+    color: var(--text-mork);
+  }
+  .ansokan .knappar { 
+    display: flex; 
+    justify-content: space-between; 
+    margin-top: 20px; 
+  }
+  .ansokan .knappar button {
+    padding: 10px 22px;
+    padding-bottom: 15px;
+    border: none;
+    border-radius: 15px;
+    font-size: 16px;
+    cursor: pointer;
+    background: var(--guld);
+    color: var(--text-mork);
+  }
+  .ansokan .knappar button:hover { 
+    text-shadow: 0 0.5px 1px var(--kort-sand);
+    box-shadow: 0 0 4px var(--guld-svag);
+  }
+  .ansokan .knappar button:disabled {
+    background: var(--guld-svag);
+    cursor: default;
+  }
+  /* Steg-cirklar */
+  .ansokan .steg-cirklar {
+   display: flex;
+   gap: 17px;
+
+  }
+  .ansokan .steg {
+    width: 45px; height: 45px; 
+    border-radius: 50%;
+    background: transparent;
+    border: 1px solid var(--guld-svag);
+    color: var(--guld-svag); 
+    font-weight: 600; 
+    font-size: 16px;
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    box-shadow: 0 2px 8px var(--skugga);
+    transition: 0.2s;
+  }
+  .ansokan .steg.aktiv { 
+    background: var(--guld); 
+
+    border: 0.5px solid var(--guld);
+    color: var(--text-mork); 
+    text-shadow: 0 0.5px 2px var(--text-mork);
+    transform: scale(1.08); 
+  }
+  .ansokan .steg.klar { 
+    background: var(--guld); 
+    border-color: var(--sida-bakgrund); 
+    color: var(--guld); 
+  }
+  .ansokan .steg.klar:hover {
+  background: var(--guld-svag);             /* fylls svagt med guld */
+  transform: scale(1.12);                   /* växer lite */
+  box-shadow: 0 4px 12px rgba(212, 176, 106, 0.35);
+}
+.ansokan .steg:not(.klar):not(.aktiv):hover {
+  border-color: var(--guld);                /* kanten tänds lite */
+  cursor: not-allowed;
+}
+
+
+
+
+  /* Mobilanpassning */
+  @media (max-width: 1024px) {
+    .ansokan .layout { 
+      flex-direction: column; /* text ovanför kortet */
+      gap: 30px; 
+    }
+   .ansokan .quiz{
+    flex: none;
+    width: 100%;
+    max-width: 520px;
+   }
+    
+    /* Login */
+    .login .form-grid { 
+      grid-template-columns: 1fr;
+     }
+    .login .kort { 
+      padding: 36px 24px; 
+    }
+    .login .steg { 
+      width: 36px; 
+      height: 36px; 
+      font-size: 13px; 
+    }
+    .login .smileys { 
+      font-size: 44px; 
+    }
+  }
